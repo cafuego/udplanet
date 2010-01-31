@@ -166,12 +166,17 @@ function udplanet_feeds_user_edit_submit($form, &$form_state) {
     db_query('DELETE FROM {udplanet_feeds} WHERE lid=%d AND uid="%s"', $lid, $uid);
     db_query('DELETE FROM {aggregator_item} WHERE fid=%d', $fid);
     db_query('DELETE FROM {aggregator_feed} WHERE fid=%d', $fid);
+    db_query('DELETE FROM {aggregator_category_feed} WHERE fid=%d', $fid);
   }
 
   // Add
   if ($op == 'Add') {
     db_query("INSERT INTO {aggregator_feed} (title, url, refresh, block, description, image) VALUES ('%s', '%s', 900, 5, '', '')", $feed_title, $feed_url);
     $fid = db_last_insert_id('aggregator_feed', 'fid');
+    // Assign category, if set.
+    if ($cid = variable_get('udplanet_feed_category', 0)) {
+      db_query("INSERT INTO {aggregator_category_feed} (fid, cid)  VALUES (%d, %d)", $fid, $cid);
+    }
     db_query('INSERT INTO {udplanet_feeds} (uid, fid, disabled) VALUES ("%s", "%s", "%s")', $uid, $fid, $disabled);
   }
 

@@ -19,6 +19,23 @@ function udplanet_admin_settings() {
     '#collapsed' => TRUE,
     '#tree' => FALSE,
   );
+
+  // Fetch a list of categories.
+  //
+  $options = array (0 => 'No category');
+  $result = db_query('SELECT cid, title FROM {aggregator_category}');
+  while ($row = db_fetch_array($result)) {
+    $options[$row['cid']] = $row['title'];
+  }
+
+  $form['general']['udplanet_feed_category'] = array(
+    '#type' => 'select',
+    '#title' => t('Aggregator Category'),
+    '#description' => t('The aggregator category to assign to retrieved feed items.'),
+    '#options' => $options,
+    '#default_value' => variable_get('udplanet_feed_category', 0)
+  );
+
   $form['general']['udplanet_feed_items'] = array(
     '#type' => 'textfield',
     '#title' => t('Feed Items'),
