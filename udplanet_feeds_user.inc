@@ -9,7 +9,7 @@
 /**
  * Manage Planet Feeds
  */
-function udplanet_feeds_user() {
+function udplanet_feeds_user($userid = NULL) {
   if ($userid == NULL) {
     global $user;
     $userid = $user->uid;
